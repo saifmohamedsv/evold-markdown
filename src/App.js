@@ -1,8 +1,9 @@
-import {createTheme, Paper, styled, ThemeProvider} from "@mui/material";
+import {Box, createTheme, Paper, styled, ThemeProvider} from "@mui/material";
 import {useSelector} from "react-redux";
 import Navbar from "./components/navbar/navbar";
-import Box from "@mui/material/Box";
+import {BrowserRouter, Outlet, Route, Routes} from "react-router-dom";
 import SideDrawer from "./components/drawer/drawer";
+import Markdown from "./components/markdown/markdown";
 
 const drawerWidth = 300;
 
@@ -40,19 +41,36 @@ function App() {
 
     const lightTheme = createTheme({});
 
-    return (
-        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+    const LayOut = () => {
+        return (
             <Paper sx={{height: "100vh", borderRadius: "0"}}>
                 <Navbar/>
-                <Box display={"flex"}>
+                <Box display={"flex"} sx={{flexGrow:1}}>
                     <SideDrawer drawerWidth={drawerWidth}/>
                     <Main open={sideMenuOpened}>
-                        123
+                        <Outlet/>
                     </Main>
                 </Box>
             </Paper>
-        </ThemeProvider>
+        )
+    }
 
+    return (
+        <BrowserRouter>
+            <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+                <Routes>
+                    <Route path={'/'} element={<LayOut/>}>
+                        <Route index element={
+                            <h1 style={{margin: "auto", width: "fit-content"}}>
+                                Choose a file to show
+                                markdowns
+                            </h1>}
+                        />
+                        <Route path="mdfile/:fid" element={<Markdown/>}/>
+                    </Route>
+                </Routes>
+            </ThemeProvider>
+        </BrowserRouter>
     );
 }
 
