@@ -2,7 +2,7 @@ import {CHANGE_THEME, TOGGLE_DRAWER} from "./types";
 
 const initState = {
     darkMode: true,
-    sideMenuOpened: false,
+    sideMenuOpened: true,
 }
 
 const mainReducer = (state = initState, action) => {
