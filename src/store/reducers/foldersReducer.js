@@ -10,16 +10,14 @@ const foldersReducer = (state = initState, action) => {
 
         case ADD_FILE_TO_FOLDER:
             const currentFolder = state.find(fo => fo.gid === action.payload.gid)
-            if (currentFolder.files.includes(action.payload.fid)) {
-                break;
-            }
             const {files} = currentFolder
             const newFiles = [...files, action.payload.fid]
-            currentFolder.files = newFiles
-            return [...state.filter(fo => fo.gid !== action.payload.gid), currentFolder]
+            const newFolder = {...currentFolder, files: newFiles}
+            return [...state.filter(fo => fo.gid !== action.payload.gid), newFolder]
 
         case DELETE_FOLDER:
             return state.filter(f => f.gid !== action.payload)
+
         default:
             return state
     }

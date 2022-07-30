@@ -103,8 +103,8 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
 
 
 const FolderAccordion = ({folder}) => {
-    const [expanded, setExpanded] = React.useState('');
     const files = useSelector(state => state.files)
+    const [expanded, setExpanded] = React.useState('');
 
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
@@ -116,13 +116,14 @@ const FolderAccordion = ({folder}) => {
         router(`mdfile/${file.fid}`)
     }
 
-    const ourFiles = files.filter((f, i) => f.fid === folder.files[i])
+    const ourFiles = files?.filter((f, i) => f.fid === folder.files[i])
+
 
     return (
         <div>
-            <Accordion expanded={expanded === folder.name} onChange={handleChange(folder.name)}>
+            <Accordion expanded={expanded === folder?.name} onChange={handleChange(folder?.name)}>
                 <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                    <Box display={"flex"} alignItems={"center"} key={folder.gid}>
+                    <Box display={"flex"} alignItems={"center"}>
                         <FolderIcon sx={{fontSize: "48px", margin: "12px 6px 12px 0"}}/>
                         <Box>
                             <Typography variant={"body1"}>{folder.name}</Typography>

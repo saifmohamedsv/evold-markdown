@@ -9,8 +9,10 @@ import {deleteFile} from "../../store/actions/handleFiles";
 import {addFileToFolder} from "../../store/actions/handleFolders";
 
 const RenderFiles = () => {
-    const [query] = useSearchParams()
-    const files = useSelector(state => state.files.filter(f => f.name.includes(query.get('q'))))
+    const [query, setQ] = useSearchParams()
+
+    const files = useSelector(state => state.files)
+
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
@@ -46,9 +48,11 @@ const RenderFiles = () => {
                     <Typography variant={"body2"} sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
                 </Box>
             </Box>
+
             <IconButton onClick={handleClick}>
                 <MoreVertIcon/>
             </IconButton>
+
             <Popover
                 id={id}
                 open={open}
@@ -62,15 +66,16 @@ const RenderFiles = () => {
                 <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
                     <Button variant={"outlined"} onClick={() => dispatch(deleteFile(file))}>Delete
                         File</Button>
-                    <FoldersOnHover file={file}/>
+                    <FoldersOnHover fid={file.fid}/>
                 </Box>
+
             </Popover>
         </Box>
     ))
 }
 
 
-const FoldersOnHover = ({file}) => {
+const FoldersOnHover = ({fid}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [snackOpen, setSnackOpen] = React.useState(false);
 
@@ -93,23 +98,21 @@ const FoldersOnHover = ({file}) => {
         setAnchorEl(null);
     };
 
-    const open = Boolean(anchorEl);
 
     const folders = useSelector(state => state.folders)
 
     const dispatch = useDispatch()
 
     const onChooseFolder = (gid) => {
-        dispatch(addFileToFolder(gid, file.fid))
+        dispatch(addFileToFolder(gid, fid))
         handleSnackOpen()
     }
+    const open = Boolean(anchorEl);
 
     return (
         <div>
             <Button
                 variant={"outlined"}
-                aria-owns={open ? 'mouse-over-popover' : undefined}
-                aria-haspopup="true"
                 onMouseEnter={handlePopoverOpen}
             >
                 Add To Folder

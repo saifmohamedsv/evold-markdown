@@ -12,8 +12,8 @@ export const createNewFolder = (values) => {
 
 export const deleteFolder = (gid) => {
     return (dispatch, getState) => {
-        const folder = getState().folders.find(f => f.gid === gid)
-        const files = getState().files.filter((f, i) => f.fid === folder.files[i])
+        const folder = getState().folders?.find(f => f.gid === gid)
+        const files = getState().files?.filter((f, i) => f.fid === folder.files[i])
         files.map((file) => dispatch({
                 type: DELETE_FILE,
                 payload: file
@@ -27,7 +27,7 @@ export const deleteFolder = (gid) => {
 }
 
 export const addFileToFolder = (gid, fid) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({
             type: ADD_FILE_TO_FOLDER,
             payload: {gid, fid}

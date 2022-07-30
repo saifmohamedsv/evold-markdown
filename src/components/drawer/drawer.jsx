@@ -24,7 +24,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 const SideDrawer = ({drawerWidth}) => {
     const open = useSelector(state => state.main.sideMenuOpened)
     const [query, setQuery] = useSearchParams()
-    const [term, setTerm] = useState(query.get('q'))
+    const [term, setTerm] = useState(query.get('q') || '')
     const dispatch = useDispatch()
     const router = useNavigate()
     const handleDrawerClose = () => {
