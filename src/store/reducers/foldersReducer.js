@@ -1,4 +1,4 @@
-import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FOLDER} from "./types";
+import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FOLDER, REFETCH} from "./types";
 
 const initState = []
 
@@ -26,6 +26,15 @@ const foldersReducer = (state = initState, action) => {
             return state
     }
 
+}
+
+export const reFetchReducer = (state = false, action) => {
+    switch (action.type) {
+        case REFETCH:
+            return !state
+        default:
+            return state
+    }
 }
 
 export default foldersReducer

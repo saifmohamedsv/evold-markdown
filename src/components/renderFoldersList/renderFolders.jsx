@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Button, IconButton, Popover, Typography} from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -11,13 +11,16 @@ import {styled} from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import formatDate from "../../utils/formatDate";
-import {deleteFolder} from "../../store/actions/handleFolders";
+import {deleteFolder, reFetch} from "../../store/actions/handleFolders";
 
 
 const RenderFolders = () => {
     const files = useSelector(state => state.files)
     const folders = useSelector(state => state.folders)
+    const reFetchRed = useSelector(state => state.reFetch)
+
     const [anchorEl, setAnchorEl] = useState(null);
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -38,7 +41,10 @@ const RenderFolders = () => {
         dispatch(deleteFolder(gid))
         router('/')
     }
-
+    console.log(reFetchRed)
+    useEffect(() => {
+        dispatch(reFetch())
+    }, [dispatch])
 
     return folders?.map(folder => (
         <Box key={folder.gid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
@@ -66,8 +72,6 @@ const RenderFolders = () => {
         </Box>
     ))
 }
-
-
 
 
 const FolderAccordion = ({folder, files}) => {

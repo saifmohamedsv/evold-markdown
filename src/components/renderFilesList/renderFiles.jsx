@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
-import React from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {Box, Button, Typography} from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -12,6 +12,7 @@ import {addFileToFolder, reFetch} from "../../store/actions/handleFolders";
 
 
 const RenderFiles = () => {
+    const [query, setQ] = useSearchParams()
     const files = useSelector(state => state.files)
     const folders = useSelector(state => state.folders)
 
@@ -20,6 +21,7 @@ const RenderFiles = () => {
         dispatch(addFileToFolder(gid, fid))
         dispatch(reFetch())
     }
+
 
 
     const dispatch = useDispatch()

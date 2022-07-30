@@ -36,7 +36,7 @@ export const addFileToFolder = (gid, fid) => {
 }
 
 
-export const reFetch = (gid, fid) => {
+export const reFetch = () => {
     return (dispatch) => {
         dispatch({
             type: REFETCH,
