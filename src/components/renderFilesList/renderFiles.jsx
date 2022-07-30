@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {Alert, Box, Button, IconButton, Popover, Snackbar, Typography} from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import formatDate from "../../utils/formatDate";
@@ -11,6 +11,7 @@ import {addFileToFolder} from "../../store/actions/handleFolders";
 const RenderFiles = () => {
     const files = useSelector(state => state.files)
     const [anchorEl, setAnchorEl] = useState(null);
+    const [query, setQuery] = useSearchParams()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -33,39 +34,53 @@ const RenderFiles = () => {
         router(`mdfile/${file.fid}`)
     }
 
-    return files?.map(file => (
-        <Box key={file.fid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
-             sx={{cursor: "pointer"}}
+    const Render = ({filesArr}) => {
+        return (
+            <>
+                {filesArr?.map(file => (
+                    <Box key={file.fid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
+                         sx={{cursor: "pointer"}}
 
-        >
-            <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"} key={file.fid}>
-                <InsertDriveFileIcon sx={{fontSize: "48px", mr: 1, margin: "12px 0"}}/>
-                <Box>
-                    <Typography variant={"body1"}>{file.name}</Typography>
-                    <Typography variant={"body2"} sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
-                </Box>
-            </Box>
-            <IconButton onClick={handleClick}>
-                <MoreVertIcon/>
-            </IconButton>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-            >
-                <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
-                    <Button variant={"outlined"} onClick={() => dispatch(deleteFile(file))}>Delete File</Button>
-                    <FoldersOnHover file={file}/>
-                </Box>
-            </Popover>
-        </Box>
+                    >
+                        <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"} key={file.fid}>
+                            <InsertDriveFileIcon sx={{fontSize: "48px", mr: 1, margin: "12px 0"}}/>
+                            <Box>
+                                <Typography variant={"body1"}>{file.name}</Typography>
+                                <Typography variant={"body2"} sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
+                            </Box>
+                        </Box>
+                        <IconButton onClick={handleClick}>
+                            <MoreVertIcon/>
+                        </IconButton>
+                        <Popover
+                            id={id}
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                        >
+                            <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
+                                <Button variant={"outlined"} onClick={() => dispatch(deleteFile(file))}>Delete
+                                    File</Button>
+                                <FoldersOnHover file={file}/>
+                            </Box>
+                        </Popover>
+                    </Box>
 
-    ))
+                ))}
+            </>
+        )
+    }
+
+    if (query.get('q')) {
+        const filtered = files.filter(f => f.name.includes(query.get('q')))
+        return <Render filesArr={filtered}/>
+    } else {
+        return <Render filesArr={files}/>
+    }
 }
 
 

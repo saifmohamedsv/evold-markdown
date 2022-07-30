@@ -45,7 +45,7 @@ function App() {
         return (
             <Paper sx={{height: "100vh", borderRadius: "0"}}>
                 <Navbar/>
-                <Box display={"flex"} sx={{flexGrow:1}}>
+                <Box display={"flex"} sx={{flexGrow: 1}}>
                     <SideDrawer drawerWidth={drawerWidth}/>
                     <Main open={sideMenuOpened}>
                         <Outlet/>

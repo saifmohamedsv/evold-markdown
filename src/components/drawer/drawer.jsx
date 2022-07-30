@@ -1,14 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {useDispatch, useSelector} from "react-redux";
 import {toggleSideMenu} from "../../store/actions/toggleSideMenu";
 
-import InputHandler from "../input-handler/inputHandler";
-import {Form, Formik} from "formik";
-
-import {Box, Divider, Drawer, IconButton, Typography} from "@mui/material";
+import {Box, Divider, Drawer, IconButton, TextField, Typography} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import {useNavigate} from "react-router-dom";
 
 import {Drawer__SearchContainer} from "./style";
 import RenderFolders from "../renderFoldersList/renderFolders";
@@ -25,11 +23,18 @@ const DrawerHeader = styled('div')(({theme}) => ({
 
 const SideDrawer = ({drawerWidth}) => {
     const open = useSelector(state => state.main.sideMenuOpened)
+    const [term, setTerm] = useState('')
     const dispatch = useDispatch()
-
+    const router = useNavigate()
     const handleDrawerClose = () => {
         dispatch(toggleSideMenu())
     };
+
+    const handleChange = (e) => {
+        setTerm(e.target.value)
+        router(`/?q=${e.target.value}`)
+
+    }
 
     return (
         <Drawer
@@ -49,17 +54,18 @@ const SideDrawer = ({drawerWidth}) => {
             <DrawerHead handleDrawerClose={handleDrawerClose}/>
 
             <Box sx={Drawer__SearchContainer}>
-                <Formik
-                    initialValues={{search: ""}}
-                    onSubmit={() => {
-                    }}
-                >
-                    {(formikProps) => (
-                        <Form style={{margin: "12px 0"}}>
-                            <InputHandler label={"Search a file or folder"} name={"search"}/>
-                        </Form>
-                    )}
-                </Formik>
+                {/*<Formik*/}
+                {/*    initialValues={{search: ""}}*/}
+                {/*    onSubmit={() => {*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    {(formikProps) => (*/}
+                {/*        <Form style={{margin: "12px 0"}}>*/}
+                {/*            <InputHandler label={"Search a file or folder"} name={"search"}/>*/}
+                {/*        </Form>*/}
+                {/*    )}*/}
+                {/*</Formik>*/}
+                <TextField sx={{m: 1}} value={term} onChange={handleChange} label={"Search a file or folder"}/>
                 <DrawerPopOver/>
                 <Divider/>
             </Box>
