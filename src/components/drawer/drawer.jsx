@@ -12,12 +12,14 @@ import {styled} from '@mui/material/styles';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import FolderIcon from '@mui/icons-material/Folder';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import {Drawer__SearchContainer} from "./style";
 import CreateFileModal from "../create-file-modal/createFileModal";
 import formatDate from "../../utils/formatDate";
 import {deleteFile} from "../../store/actions/handleFiles";
+import CreateFolderModal from "../create-folder-modal/createFolderModal";
 
 const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
@@ -69,6 +71,7 @@ const SideDrawer = ({drawerWidth}) => {
                 <Divider/>
             </Box>
             <RenderFiles/>
+            <RenderFolders/>
         </Drawer>
     );
 };
@@ -132,9 +135,66 @@ const RenderFiles = () => {
     ))
 }
 
+// Render a list of folders
+const RenderFolders = () => {
+    const folders = useSelector(state => state.folders)
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+
+    const dispatch = useDispatch()
+
+    const router = useNavigate()
+
+
+    return folders?.map(folder => (
+        <Box key={folder.gid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
+             sx={{cursor: "pointer"}}
+
+        >
+            <Box display={"flex"} alignItems={"center"} key={folder.gid}>
+                <FolderIcon sx={{fontSize:"48px", margin: "12px 6px 12px 0"}} />
+                <Box>
+                    <Typography variant={"body1"}>{folder.name}</Typography>
+                    <Typography variant={"body2"} sx={{opacity: "0.6"}}>{folder.files.length} files</Typography>
+                </Box>
+            </Box>
+            <IconButton onClick={handleClick}>
+                <MoreVertIcon/>
+            </IconButton>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+            >
+                <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
+                    <Button variant={"outlined"}>Delete Folder</Button>
+                </Box>
+            </Popover>
+        </Box>
+
+    ))
+}
+
 
 const DrawerPopOver = () => {
     const [newFileModalOpen, setNewFileModalOpen] = useState(false);
+    const [newFolderModalOpen, setNewFoldereModalOpen] = useState(false);
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -167,10 +227,11 @@ const DrawerPopOver = () => {
             >
                 <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
                     <Button variant={"outlined"} onClick={() => setNewFileModalOpen(true)}>New File</Button>
-                    <Button variant={"outlined"}>New Folder</Button>
+                    <Button variant={"outlined"} onClick={() => setNewFoldereModalOpen(true)}>New Folder</Button>
                 </Box>
             </Popover>
             <CreateFileModal open={newFileModalOpen} setOpen={setNewFileModalOpen}/>
+            <CreateFolderModal open={newFolderModalOpen} setOpen={setNewFoldereModalOpen}/>
         </div>
     );
 
