@@ -9,7 +9,7 @@ const foldersReducer = (state = initState, action) => {
             return [...state, action.payload]
 
         case ADD_FILE_TO_FOLDER:
-            const currentFolder = state.find(fo => fo.gid === action.payload.gid.gid)
+            const currentFolder = state.find(fo => fo.gid === action.payload.gid)
             console.log(currentFolder, action.payload)
             const {files} = currentFolder
             const newFiles = [...files, action.payload.fid]

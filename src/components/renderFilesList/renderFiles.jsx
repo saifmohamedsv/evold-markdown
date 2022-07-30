@@ -8,6 +8,7 @@ import formatDate from "../../utils/formatDate";
 import IconButton from "@mui/material/IconButton";
 import {OverlayTrigger, Popover} from "react-bootstrap";
 import {addFileToFolder} from "../../store/actions/handleFolders";
+import {deleteFile} from "../../store/actions/handleFiles";
 
 
 const RenderFiles = () => {
