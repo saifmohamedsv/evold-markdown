@@ -32,7 +32,7 @@ const SideDrawer = ({drawerWidth}) => {
 
     const handleChange = (e) => {
         setTerm(e.target.value)
-        router(`/?q=${e.target.value}`)
+        router(`?q=${e.target.value}`)
 
     }
 
