@@ -7,6 +7,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import formatDate from "../../utils/formatDate";
 import IconButton from "@mui/material/IconButton";
 import {OverlayTrigger, Popover} from "react-bootstrap";
+import {addFileToFolder} from "../../store/actions/handleFolders";
 
 
 const RenderFiles = () => {
