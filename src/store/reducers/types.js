@@ -13,3 +13,6 @@ export const ADD_FILE_TO_FOLDER = 'ADD-FILE-TO-FOLDER'
 export const CREATE_FOLDER = 'CREATE-FOLDER'
 
 export const DELETE_FOLDER = 'DELETE-FOLDER'
+
+
+export const REFETCH = 'REFETCH'

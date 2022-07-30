@@ -7,8 +7,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import formatDate from "../../utils/formatDate";
 import IconButton from "@mui/material/IconButton";
 import {OverlayTrigger, Popover} from "react-bootstrap";
-import {addFileToFolder} from "../../store/actions/handleFolders";
 import {deleteFile} from "../../store/actions/handleFiles";
+import {addFileToFolder, reFetch} from "../../store/actions/handleFolders";
 
 
 const RenderFiles = () => {
@@ -18,6 +18,7 @@ const RenderFiles = () => {
 
     const onChooseFolder = (gid, fid) => {
         dispatch(addFileToFolder(gid, fid))
+        dispatch(reFetch())
     }
 
 
@@ -29,8 +30,6 @@ const RenderFiles = () => {
     const handleFileNav = (file) => {
         router(`mdfile/${file.fid}`)
     }
-
-
 
 
     return (
@@ -46,10 +45,6 @@ const RenderFiles = () => {
                             <Typography variant={"body2"} sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
                         </Box>
                     </Box>
-
-                    {/*<IconButton onClick={handleClick}>*/}
-                    {/*    <MoreVertIcon/>*/}
-                    {/*</IconButton>*/}
                     <OverlayTrigger trigger="click" placement="right" overlay={
                         <Popover id="popover-basic">
                             <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>

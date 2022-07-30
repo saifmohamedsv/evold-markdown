@@ -1,4 +1,4 @@
-import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FILE, DELETE_FOLDER} from "../reducers/types";
+import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FILE, DELETE_FOLDER, REFETCH} from "../reducers/types";
 
 
 export const createNewFolder = (values) => {
@@ -31,6 +31,16 @@ export const addFileToFolder = (gid, fid) => {
         dispatch({
             type: ADD_FILE_TO_FOLDER,
             payload: {gid, fid}
+        })
+    }
+}
+
+
+export const reFetch = (gid, fid) => {
+    return (dispatch) => {
+        dispatch({
+            type: REFETCH,
+            payload: false
         })
     }
 }
