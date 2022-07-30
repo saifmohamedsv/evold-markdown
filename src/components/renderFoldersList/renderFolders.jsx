@@ -31,9 +31,11 @@ const RenderFolders = () => {
 
 
     const dispatch = useDispatch()
+    const router = useNavigate()
 
     const handleDeleteFolder = (gid) => {
         dispatch(deleteFolder(gid))
+        router('/')
     }
 
     return folders?.map(folder => (
@@ -41,13 +43,6 @@ const RenderFolders = () => {
              sx={{cursor: "pointer"}}
 
         >
-            {/*<Box display={"flex"} alignItems={"center"} key={folder.gid}>*/}
-            {/*    <FolderIcon sx={{fontSize: "48px", margin: "12px 6px 12px 0"}}/>*/}
-            {/*    <Box>*/}
-            {/*        <Typography variant={"body1"}>{folder.name}</Typography>*/}
-            {/*        <Typography variant={"body2"} sx={{opacity: "0.6"}}>{folder.files.length} files</Typography>*/}
-            {/*    </Box>*/}
-            {/*</Box>*/}
             <FolderAccordion folder={folder}/>
             <IconButton onClick={handleClick}>
                 <MoreVertIcon/>

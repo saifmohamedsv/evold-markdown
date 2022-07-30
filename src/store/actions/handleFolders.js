@@ -1,4 +1,4 @@
-import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FOLDER} from "../reducers/types";
+import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FILE, DELETE_FOLDER} from "../reducers/types";
 
 
 export const createNewFolder = (values) => {
@@ -11,7 +11,14 @@ export const createNewFolder = (values) => {
 }
 
 export const deleteFolder = (gid) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const folder = getState().folders.find(f => f.gid === gid)
+        const files = getState().files.filter((f, i) => f.fid === folder.files[i])
+        files.map((file) => dispatch({
+                type: DELETE_FILE,
+                payload: file
+            })
+        )
         dispatch({
             type: DELETE_FOLDER,
             payload: gid
