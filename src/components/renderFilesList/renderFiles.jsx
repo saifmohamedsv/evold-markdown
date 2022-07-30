@@ -105,6 +105,7 @@ const FoldersOnHover = ({fid}) => {
 
     const onChooseFolder = (gid) => {
         dispatch(addFileToFolder(gid, fid))
+        console.log(gid, fid)
         handleSnackOpen()
     }
     const open = Boolean(anchorEl);
