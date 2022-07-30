@@ -1,13 +1,8 @@
-import {ADD_FILE_TO_FOLDER, CREATE_FOLDER} from "../reducers/types";
+import {ADD_FILE_TO_FOLDER, CREATE_FOLDER, DELETE_FOLDER} from "../reducers/types";
 
-const folderState = {
-    nmae: "",
-    id: 0,
-    files: []
-}
 
 export const createNewFolder = (values) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({
             type: CREATE_FOLDER,
             payload: values
@@ -15,6 +10,14 @@ export const createNewFolder = (values) => {
     }
 }
 
+export const deleteFolder = (gid) => {
+    return (dispatch) => {
+        dispatch({
+            type: DELETE_FOLDER,
+            payload: gid
+        })
+    }
+}
 
 export const addFileToFolder = (gid, fid) => {
     return (dispatch, getState) => {
