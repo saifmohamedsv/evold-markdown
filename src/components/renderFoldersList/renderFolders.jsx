@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Button, IconButton, Popover, Typography} from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -37,6 +37,10 @@ const RenderFolders = () => {
         dispatch(deleteFolder(gid))
         router('/')
     }
+
+    useEffect(() => {
+        console.log(folders)
+    }, [dispatch, folders])
 
     return folders?.map(folder => (
         <Box key={folder.gid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}

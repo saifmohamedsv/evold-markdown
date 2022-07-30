@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Alert, Box, Button, IconButton, Popover, Snackbar, Typography} from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import formatDate from "../../utils/formatDate";
@@ -9,8 +9,6 @@ import {deleteFile} from "../../store/actions/handleFiles";
 import {addFileToFolder} from "../../store/actions/handleFolders";
 
 const RenderFiles = () => {
-    const [query, setQ] = useSearchParams()
-
     const files = useSelector(state => state.files)
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -37,46 +35,50 @@ const RenderFiles = () => {
     }
 
 
-    return files?.map(file => (
-        <Box key={file.fid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
-             sx={{cursor: "pointer"}}
-        >
-            <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"} key={file.fid}>
-                <InsertDriveFileIcon sx={{fontSize: "48px", mr: 1, margin: "12px 0"}}/>
-                <Box>
-                    <Typography variant={"body1"}>{file.name}</Typography>
-                    <Typography variant={"body2"} sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
+    return (
+        <>
+            {files?.map(file => (
+                <Box key={file.fid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
+                     sx={{cursor: "pointer"}}
+                >
+                    <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"} key={file.fid}>
+                        <InsertDriveFileIcon sx={{fontSize: "48px", mr: 1, margin: "12px 0"}}/>
+                        <Box>
+                            <Typography variant={"body1"}>{file.name}</Typography>
+                            <Typography variant={"body2"} sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
+                        </Box>
+                    </Box>
+
+                    <IconButton onClick={handleClick}>
+                        <MoreVertIcon/>
+                    </IconButton>
+
+                    <Popover
+                        id={id}
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                    >
+                        <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
+                            <Button variant={"outlined"} onClick={() => dispatch(deleteFile(file))}>Delete
+                                File</Button>
+                            <FoldersOnHover fid={file.fid}/>
+                        </Box>
+
+                    </Popover>
                 </Box>
-            </Box>
-
-            <IconButton onClick={handleClick}>
-                <MoreVertIcon/>
-            </IconButton>
-
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-            >
-                <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
-                    <Button variant={"outlined"} onClick={() => dispatch(deleteFile(file))}>Delete
-                        File</Button>
-                    <FoldersOnHover fid={file.fid}/>
-                </Box>
-
-            </Popover>
-        </Box>
-    ))
+            ))}
+        </>
+    )
 }
 
 
 const FoldersOnHover = ({fid}) => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl2, setAnchorEl2] = React.useState(null);
     const [snackOpen, setSnackOpen] = React.useState(false);
 
     const handleSnackOpen = () => {
@@ -91,11 +93,11 @@ const FoldersOnHover = ({fid}) => {
     };
 
     const handlePopoverOpen = (event) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl2(event.currentTarget);
     };
 
     const handlePopoverClose = () => {
-        setAnchorEl(null);
+        setAnchorEl2(null);
     };
 
 
@@ -105,10 +107,10 @@ const FoldersOnHover = ({fid}) => {
 
     const onChooseFolder = (gid) => {
         dispatch(addFileToFolder(gid, fid))
-        console.log(gid, fid)
         handleSnackOpen()
     }
-    const open = Boolean(anchorEl);
+
+    const open = Boolean(anchorEl2);
 
     return (
         <div>
@@ -121,7 +123,7 @@ const FoldersOnHover = ({fid}) => {
             <Popover
                 id="mouse-over-popover"
                 open={open}
-                anchorEl={anchorEl}
+                anchorEl={anchorEl2}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right',
