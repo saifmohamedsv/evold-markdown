@@ -53,8 +53,7 @@ const RenderFiles = () => {
                         <Popover id="popover-basic">
                             <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
                                 <Button variant={"contained"} onClick={() => {
-                                    // dispatch(deleteFile(file))
-                                    console.log(file)
+                                    dispatch(deleteFile(file))
                                 }}>
                                     Delete
                                     File
@@ -65,7 +64,7 @@ const RenderFiles = () => {
                                         {folders?.map((folder, index) => (
                                             <Box key={index} sx={{p: 1, borderBottom: "1px solid gray"}}>
                                                 <Button variant={"contained"}
-                                                        onClick={() => onChooseFolder(folder, file)}>{folder.name}</Button>
+                                                        onClick={() => onChooseFolder(folder.gid, file.fid)}>{folder.name}</Button>
                                                 {/*<Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>*/}
                                                 {/*    <Alert onClose={handleSnackClose} severity="success" sx={{width: '100%'}}>*/}
                                                 {/*        Your file has been added to {folder.name} successfully*/}
