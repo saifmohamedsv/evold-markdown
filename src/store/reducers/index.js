@@ -13,7 +13,7 @@ export const rootReducer = combineReducers({
 });
 
 const configStorage = {
-    key: "root", storage, whitelist: ['main', '', ''],
+    key: "root", storage, whitelist: ['main', 'files', 'folders'],
 };
 
 export default persistReducer(configStorage, rootReducer);
