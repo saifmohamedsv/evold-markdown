@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Box, Button, IconButton, Popover, Typography} from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -15,6 +15,7 @@ import {deleteFolder} from "../../store/actions/handleFolders";
 
 
 const RenderFolders = () => {
+    const files = useSelector(state => state.files)
     const folders = useSelector(state => state.folders)
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -38,16 +39,13 @@ const RenderFolders = () => {
         router('/')
     }
 
-    useEffect(() => {
-        console.log(folders)
-    }, [dispatch, folders])
 
     return folders?.map(folder => (
         <Box key={folder.gid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
              sx={{cursor: "pointer"}}
 
         >
-            <FolderAccordion folder={folder}/>
+            <FolderAccordion files={files} folder={folder}/>
             <IconButton onClick={handleClick}>
                 <MoreVertIcon/>
             </IconButton>
@@ -67,6 +65,59 @@ const RenderFolders = () => {
             </Popover>
         </Box>
     ))
+}
+
+
+
+
+const FolderAccordion = ({folder, files}) => {
+    const [expanded, setExpanded] = React.useState('');
+
+    const handleChange = (panel) => (event, newExpanded) => {
+        setExpanded(newExpanded ? panel : false);
+    };
+
+    const router = useNavigate()
+
+    const handleFileNav = (file) => {
+        router(`mdfile/${file.fid}`)
+    }
+
+    const ourFiles = files?.filter((f, i) => f.fid === folder.files[i])
+
+    return (
+        <div>
+            <Accordion expanded={expanded === folder?.name} onChange={handleChange(folder?.name)}>
+                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                    <Box display={"flex"} alignItems={"center"}>
+                        <FolderIcon sx={{fontSize: "48px", margin: "12px 6px 12px 0"}}/>
+                        <Box>
+                            <Typography variant={"body1"}>{folder.name}</Typography>
+                            <Typography variant={"body2"} sx={{opacity: "0.6"}}>{folder.files.length} files</Typography>
+                        </Box>
+                    </Box>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {ourFiles?.map((file, index) => (
+                        <Box key={index} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
+                             sx={{cursor: "pointer"}}
+
+                        >
+                            <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"}
+                                 key={file.fid}>
+                                <InsertDriveFileIcon sx={{fontSize: "48px", mr: 1, margin: "12px 0"}}/>
+                                <Box>
+                                    <Typography variant={"body1"}>{file.name}</Typography>
+                                    <Typography variant={"body2"}
+                                                sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
+                                </Box>
+                            </Box>
+                        </Box>
+                    ))}
+                </AccordionDetails>
+            </Accordion>
+        </div>
+    );
 }
 
 const Accordion = styled((props) => (
@@ -104,59 +155,5 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
     padding: theme.spacing(2),
     borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
-
-
-const FolderAccordion = ({folder}) => {
-    const files = useSelector(state => state.files)
-    const [expanded, setExpanded] = React.useState('');
-
-    const handleChange = (panel) => (event, newExpanded) => {
-        setExpanded(newExpanded ? panel : false);
-    };
-
-    const router = useNavigate()
-
-    const handleFileNav = (file) => {
-        router(`mdfile/${file.fid}`)
-    }
-
-    const ourFiles = files?.filter((f, i) => f.fid === folder.files[i])
-
-
-    return (
-        <div>
-            <Accordion expanded={expanded === folder?.name} onChange={handleChange(folder?.name)}>
-                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                    <Box display={"flex"} alignItems={"center"}>
-                        <FolderIcon sx={{fontSize: "48px", margin: "12px 6px 12px 0"}}/>
-                        <Box>
-                            <Typography variant={"body1"}>{folder.name}</Typography>
-                            <Typography variant={"body2"} sx={{opacity: "0.6"}}>{folder.files.length} files</Typography>
-                        </Box>
-                    </Box>
-                </AccordionSummary>
-                <AccordionDetails>
-                    {ourFiles?.map(file => (
-                        <Box key={file.fid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
-                             sx={{cursor: "pointer"}}
-
-                        >
-                            <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"}
-                                 key={file.fid}>
-                                <InsertDriveFileIcon sx={{fontSize: "48px", mr: 1, margin: "12px 0"}}/>
-                                <Box>
-                                    <Typography variant={"body1"}>{file.name}</Typography>
-                                    <Typography variant={"body2"}
-                                                sx={{opacity: "0.6"}}>{formatDate(file.date)}</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                    ))}
-                </AccordionDetails>
-            </Accordion>
-        </div>
-    );
-}
-
 
 export default RenderFolders

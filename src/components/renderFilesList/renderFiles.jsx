@@ -1,28 +1,22 @@
 import {useDispatch, useSelector} from "react-redux";
-import React, {useState} from "react";
+import React from "react";
 import {useNavigate} from "react-router-dom";
-import {Alert, Box, Button, IconButton, Popover, Snackbar, Typography} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import formatDate from "../../utils/formatDate";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {deleteFile} from "../../store/actions/handleFiles";
-import {addFileToFolder} from "../../store/actions/handleFolders";
+import formatDate from "../../utils/formatDate";
+import IconButton from "@mui/material/IconButton";
+import {OverlayTrigger, Popover} from "react-bootstrap";
+
 
 const RenderFiles = () => {
     const files = useSelector(state => state.files)
+    const folders = useSelector(state => state.folders)
 
-    const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    const onChooseFolder = (gid, fid) => {
+        dispatch(addFileToFolder(gid, fid))
+    }
 
 
     const dispatch = useDispatch()
@@ -35,10 +29,12 @@ const RenderFiles = () => {
     }
 
 
+
+
     return (
         <>
-            {files?.map(file => (
-                <Box key={file.fid} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
+            {files?.map((file, index) => (
+                <Box key={index} display={"flex"} alignItems={"center"} justifyContent={"space-between"}
                      sx={{cursor: "pointer"}}
                 >
                     <Box onClick={() => handleFileNav(file)} display={"flex"} alignItems={"center"} key={file.fid}>
@@ -49,108 +45,110 @@ const RenderFiles = () => {
                         </Box>
                     </Box>
 
-                    <IconButton onClick={handleClick}>
-                        <MoreVertIcon/>
-                    </IconButton>
+                    {/*<IconButton onClick={handleClick}>*/}
+                    {/*    <MoreVertIcon/>*/}
+                    {/*</IconButton>*/}
+                    <OverlayTrigger trigger="click" placement="right" overlay={
+                        <Popover id="popover-basic">
+                            <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
+                                <Button variant={"contained"} onClick={() => {
+                                    // dispatch(deleteFile(file))
+                                    console.log(file)
+                                }}>
+                                    Delete
+                                    File
+                                </Button>
 
-                    <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }}
+                                <OverlayTrigger trigger="click" placement="right" overlay={
+                                    <Box display={"flex"} flexDirection={"column"} gap={2}>
+                                        {folders?.map((folder, index) => (
+                                            <Box key={index} sx={{p: 1, borderBottom: "1px solid gray"}}>
+                                                <Button variant={"contained"}
+                                                        onClick={() => onChooseFolder(folder, file)}>{folder.name}</Button>
+                                                {/*<Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>*/}
+                                                {/*    <Alert onClose={handleSnackClose} severity="success" sx={{width: '100%'}}>*/}
+                                                {/*        Your file has been added to {folder.name} successfully*/}
+                                                {/*    </Alert>*/}
+                                                {/*</Snackbar>*/}
+                                            </Box>
+                                        ))}
+                                    </Box>
+                                }>
+                                    <Button
+                                        variant={"contained"}
+                                    >
+                                        Add To Folder
+                                    </Button>
+                                </OverlayTrigger>
+                            </Box>
+                        </Popover>}
                     >
-                        <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>
-                            <Button variant={"outlined"} onClick={() => dispatch(deleteFile(file))}>Delete
-                                File</Button>
-                            <FoldersOnHover fid={file.fid}/>
-                        </Box>
+                        <IconButton>
+                            <MoreVertIcon/>
+                        </IconButton>
+                    </OverlayTrigger>
 
-                    </Popover>
+                    {/* HERE IS THE PROB */}
+                    {/*<Popover*/}
+                    {/*    id={file.fid}*/}
+                    {/*    open={open}*/}
+                    {/*    anchorEl={anchorEl}*/}
+                    {/*    onClose={handleClose}*/}
+                    {/*    anchorOrigin={{*/}
+                    {/*        vertical: 'bottom',*/}
+                    {/*        horizontal: 'left',*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    <Box sx={{display: "flex", flexDirection: "column", gap: "12px", p: 1}}>*/}
+                    {/*        <Button variant={"outlined"} onClick={() => {*/}
+                    {/*            // dispatch(deleteFile(file))*/}
+                    {/*            console.log(file)*/}
+                    {/*        }}>*/}
+                    {/*            Delete*/}
+                    {/*            File*/}
+                    {/*        </Button>*/}
+                    {/*        <Button*/}
+                    {/*            variant={"outlined"}*/}
+                    {/*            onClick={handlePopoverOpen}*/}
+                    {/*        >*/}
+                    {/*            Add To Folder*/}
+                    {/*        </Button>*/}
+                    {/*        /!* CHOOSE A FOLDER *!/*/}
+
+                    {/*        /!*<FoldersOnHover folders={folders} file={file}/>*!/*/}
+                    {/*        <Popover*/}
+                    {/*            open={ChooseFolderopen}*/}
+                    {/*            anchorEl={anchorEl2}*/}
+                    {/*            anchorOrigin={{*/}
+                    {/*                vertical: 'bottom',*/}
+                    {/*                horizontal: 'right',*/}
+                    {/*            }}*/}
+                    {/*            transformOrigin={{*/}
+                    {/*                vertical: 'top',*/}
+                    {/*                horizontal: 'left',*/}
+                    {/*            }}*/}
+                    {/*            onClose={handlePopoverClose}*/}
+                    {/*        >*/}
+                    {/*            <Box sx={{width: "100%"}} display={"flex"} flexDirection={"column"} gap={2}>*/}
+                    {/*                {folders?.map((folder, index) => (*/}
+                    {/*                    <Box key={index} sx={{p: 1, borderBottom: "1px solid gray"}}>*/}
+                    {/*                        <Button variant={"contained"}*/}
+                    {/*                                onClick={() => onChooseFolder(folder, file)}>{folder.name}</Button>*/}
+                    {/*                        /!*<Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>*!/*/}
+                    {/*                        /!*    <Alert onClose={handleSnackClose} severity="success" sx={{width: '100%'}}>*!/*/}
+                    {/*                        /!*        Your file has been added to {folder.name} successfully*!/*/}
+                    {/*                        /!*    </Alert>*!/*/}
+                    {/*                        /!*</Snackbar>*!/*/}
+                    {/*                    </Box>*/}
+                    {/*                ))}*/}
+                    {/*            </Box>*/}
+                    {/*        </Popover>*/}
+                    {/*    </Box>*/}
+                    {/*</Popover>*/}
                 </Box>
             ))}
         </>
     )
-}
-
-
-const FoldersOnHover = ({fid}) => {
-    const [anchorEl2, setAnchorEl2] = React.useState(null);
-    const [snackOpen, setSnackOpen] = React.useState(false);
-
-    const handleSnackOpen = () => {
-        setSnackOpen(true);
-    };
-
-    const handleSnackClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackOpen(false)
-    };
-
-    const handlePopoverOpen = (event) => {
-        setAnchorEl2(event.currentTarget);
-    };
-
-    const handlePopoverClose = () => {
-        setAnchorEl2(null);
-    };
-
-
-    const folders = useSelector(state => state.folders)
-
-    const dispatch = useDispatch()
-
-    const onChooseFolder = (gid) => {
-        dispatch(addFileToFolder(gid, fid))
-        handleSnackOpen()
-    }
-
-    const open = Boolean(anchorEl2);
-
-    return (
-        <div>
-            <Button
-                variant={"outlined"}
-                onMouseEnter={handlePopoverOpen}
-            >
-                Add To Folder
-            </Button>
-            <Popover
-                id="mouse-over-popover"
-                open={open}
-                anchorEl={anchorEl2}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-            >
-                <Box sx={{width: "100%"}} display={"flex"} flexDirection={"column"} gap={2}>
-                    {folders?.map(folder => (
-                        <Box key={folder.gid} sx={{p: 1, borderBottom: "1px solid gray"}}>
-                            <Button variant={"contained"}
-                                    onClick={() => onChooseFolder(folder.gid)}>{folder.name}</Button>
-                            <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-                                <Alert onClose={handleSnackClose} severity="success" sx={{width: '100%'}}>
-                                    Your file has been added to {folder.name} successfully
-                                </Alert>
-                            </Snackbar>
-                        </Box>
-                    ))}
-                </Box>
-            </Popover>
-        </div>
-    );
 }
 
 

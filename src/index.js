@@ -9,7 +9,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import reducers from "./store/reducers";
 import {applyMiddleware, compose, createStore} from "redux";
 import thunk from "redux-thunk";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 const persist = persistStore(store);
