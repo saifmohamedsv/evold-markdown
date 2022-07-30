@@ -20,8 +20,27 @@ export const Right__Input = {
 
 export const FileDetails__Container = {
     p: 1,
-    mb: 2,
-    border: "1px solid #828282"
+    border: "1px solid #828282",
+    flex: 1
+}
+
+export const FileTags__Container = {
+    p: 1,
+    border: "1px solid #828282",
+    flex: 1,
+    mb: 2
+}
+
+export const FileOptions__Container = {
+    flex: .25,
+    display: "flex",
+    alignItems: "center",
+    gap: '12px',
+}
+
+
+export const FileOptions__Icon = {
+    fontSize: "32px"
 }
 
 export const Markdown__SaveBtn = {

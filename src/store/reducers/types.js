@@ -7,3 +7,7 @@ export const CREATE_FILE = "CREATE-FILE"
 export const DELETE_FILE = 'DELETE-FILE'
 
 export const UPDATE_FILE = 'UPDATE-FILE'
+
+export const ADD_FILE_TO_FOLDER = 'ADD-FILE-TO-FOLDER'
+
+export const CREATE_FOLDER = 'CREATE-FOLDER'
