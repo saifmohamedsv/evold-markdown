@@ -9,7 +9,7 @@ import {deleteFile} from "../../store/actions/handleFiles";
 import {addFileToFolder} from "../../store/actions/handleFolders";
 
 const RenderFiles = () => {
-    const [query, setQuery] = useSearchParams()
+    const [query] = useSearchParams()
     const files = useSelector(state => state.files.filter(f => f.name.includes(query.get('q'))))
     const [anchorEl, setAnchorEl] = useState(null);
 

@@ -6,7 +6,7 @@ import {toggleSideMenu} from "../../store/actions/toggleSideMenu";
 import {Box, Divider, Drawer, IconButton, TextField, Typography} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 import {Drawer__SearchContainer} from "./style";
 import RenderFolders from "../renderFoldersList/renderFolders";
@@ -23,7 +23,8 @@ const DrawerHeader = styled('div')(({theme}) => ({
 
 const SideDrawer = ({drawerWidth}) => {
     const open = useSelector(state => state.main.sideMenuOpened)
-    const [term, setTerm] = useState('')
+    const [query, setQuery] = useSearchParams()
+    const [term, setTerm] = useState(query.get('q'))
     const dispatch = useDispatch()
     const router = useNavigate()
     const handleDrawerClose = () => {
@@ -31,9 +32,8 @@ const SideDrawer = ({drawerWidth}) => {
     };
 
     const handleChange = (e) => {
-        setTerm(e.target.value)
         router(`?q=${e.target.value}`)
-
+        setTerm(e.target.value)
     }
 
     return (
