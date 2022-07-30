@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect} from "react";
+import React from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Box, Button, Typography} from "@mui/material";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
@@ -21,7 +21,6 @@ const RenderFiles = () => {
         dispatch(addFileToFolder(gid, fid))
         dispatch(reFetch())
     }
-
 
 
     const dispatch = useDispatch()

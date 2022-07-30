@@ -87,8 +87,8 @@ const FolderAccordion = ({folder, files}) => {
         router(`mdfile/${file.fid}`)
     }
 
-    const ourFiles = files?.filter((f, i) => f.fid === folder.files[i])
-
+    const ourFiles = files?.filter((f, i) => folder.files.includes(f.fid))
+    console.log(ourFiles)
     return (
         <div>
             <Accordion expanded={expanded === folder?.name} onChange={handleChange(folder?.name)}>
